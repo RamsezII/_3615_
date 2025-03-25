@@ -71,14 +71,9 @@ def espeak_ng_json():
                     "voice": voice_name
                 })
 
-        # Récupérer les variants (dans /usr/share/espeak-ng-data/voices/!v)
-        variants_path = "/usr/share/espeak-ng-data/voices/!v"
-        variants = [f.replace("+", "") for f in os.listdir(variants_path) if not f.startswith(".")]
-
         response = {
             "languages": sorted(list(languages_set)),
-            "voices": voices,
-            "variants": sorted(variants)
+            "voices": voices
         }
 
         return json.dumps(response), 200, {'Content-Type': 'application/json'}
