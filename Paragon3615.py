@@ -48,9 +48,6 @@ def espeak():
     return send_file(out_file, mimetype="audio/wav")
 
 
-app = Flask(__name__)
-
-
 @app.route("/espeak-ng")
 def espeak_ng():
     text = request.args.get("text", "").strip()
