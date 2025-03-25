@@ -24,3 +24,7 @@ def tts():
         return response
 
     return send_file(out_file, mimetype="audio/wav")
+
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=3615)
