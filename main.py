@@ -6,7 +6,7 @@ import os
 app = Flask(__name__)
 
 
-@app.route("/tts")
+@app.route("/3615/tts")
 def tts():
     text = request.args.get("text", "")
     out_file = f"/tmp/{uuid.uuid4()}.wav"
