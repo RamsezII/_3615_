@@ -114,7 +114,7 @@ def espeak_voices():
 
 
 @app.route("/espeak-ng-json")
-def espeak_voices():
+def espeak_ng_voices():
     try:
         result = subprocess.run(["espeak-ng", "--voices"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True, text=True)
         lines = result.stdout.strip().split("\n")[1:]  # Skip header
