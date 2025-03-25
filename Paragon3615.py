@@ -48,7 +48,7 @@ def tts():
     return send_file(out_file, mimetype="audio/wav")
 
 
-@app.route("/3615/voices")
+@app.route("/voices")
 def list_voices():
     try:
         result = subprocess.run(["espeak-ng", "--voices"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True, text=True)
