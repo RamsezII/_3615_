@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 
 @app.route("/espeak")
-def tts():
+def espeak():
     text = request.args.get("text", "").strip()
     if not text:
         return "Missing 'text' parameter", 400
@@ -52,7 +52,7 @@ app = Flask(__name__)
 
 
 @app.route("/espeak-ng")
-def tts():
+def espeak_ng():
     text = request.args.get("text", "").strip()
     if not text:
         return "Missing 'text' parameter", 400
@@ -94,7 +94,7 @@ def tts():
 
 
 @app.route("/espeak--list-voices")
-def list_voices():
+def espeak_voices():
     try:
         result = subprocess.run(["espeak", "--voices"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True, text=True)
         lines = result.stdout.strip().split("\n")[1:]  # Skip header
@@ -117,7 +117,7 @@ def list_voices():
 
 
 @app.route("/espeak-ng--list-voices")
-def list_voices():
+def espeak_ng_voices():
     try:
         result = subprocess.run(["espeak-ng", "--voices"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True, text=True)
         lines = result.stdout.strip().split("\n")[1:]  # Skip header
