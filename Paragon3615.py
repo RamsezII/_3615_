@@ -21,6 +21,9 @@ def espeak_ng():
     if "variant" in request.args:
         lang = f"{lang}+{request.args.get('variant')}"
 
+    # Fichier temporaire
+    out_file = f"/tmp/{uuid.uuid4()}.wav"
+
     # Construction de la commande espeak
     command = [
         "espeak-ng",
@@ -31,9 +34,6 @@ def espeak_ng():
         "-w", out_file,
         text
     ]
-
-    # Fichier temporaire
-    out_file = f"/tmp/{uuid.uuid4()}.wav"
 
     try:
         subprocess.run(command, check=True)
