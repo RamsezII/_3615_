@@ -49,22 +49,36 @@ def espeak_ng():
 
 
 @app.route("/espeak-ng-json")
-def espeak_ng_voices():
+def espeak_ng_json():
+    voices = []
+    languages_set = set()
+
     try:
+        # Récupérer toutes les voix
         result = subprocess.run(["espeak-ng", "--voices"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True, text=True)
         lines = result.stdout.strip().split("\n")[1:]  # Skip header
-        voices = []
 
         for line in lines:
             parts = line.strip().split(None, 4)
             if len(parts) >= 5:
                 _, lang, _, voice_name, _ = parts
+                languages_set.add(lang)
                 voices.append({
                     "lang": lang,
                     "voice": voice_name
                 })
 
-        return json.dumps(voices), 200, {'Content-Type': 'application/json'}
+        # Récupérer les variants (dans /usr/share/espeak-ng-data/voices/!v)
+        variants_path = "/usr/share/espeak-ng-data/voices/!v"
+        variants = [f.replace("+", "") for f in os.listdir(variants_path) if not f.startswith(".")]
+
+        response = {
+            "languages": sorted(list(languages_set)),
+            "voices": voices,
+            "variants": sorted(variants)
+        }
+
+        return json.dumps(response), 200, {'Content-Type': 'application/json'}
 
     except Exception as e:
         return json.dumps({"error": str(e)}), 500, {'Content-Type': 'application/json'}
