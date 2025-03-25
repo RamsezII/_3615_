@@ -1,4 +1,4 @@
-from flask import Flask, request, send_file, after_this_request
+from flask import Flask, json, request, send_file, after_this_request
 import subprocess
 import uuid
 import os
@@ -46,6 +46,28 @@ def tts():
         return response
 
     return send_file(out_file, mimetype="audio/wav")
+
+
+@app.route("/3615/voices")
+def list_voices():
+    try:
+        result = subprocess.run(["espeak-ng", "--voices"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True, text=True)
+        lines = result.stdout.strip().split("\n")[1:]  # Skip header
+        voices = []
+
+        for line in lines:
+            parts = line.strip().split(None, 4)
+            if len(parts) >= 5:
+                _, lang, _, voice_name, _ = parts
+                voices.append({
+                    "lang": lang,
+                    "voice": voice_name
+                })
+
+        return json.dumps(voices), 200, {'Content-Type': 'application/json'}
+
+    except Exception as e:
+        return json.dumps({"error": str(e)}), 500, {'Content-Type': 'application/json'}
 
 
 if __name__ == "__main__":
